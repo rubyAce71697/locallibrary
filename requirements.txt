@@ -3,4 +3,4 @@ django-extensions==1.7.6
 django-filter==1.0.1
 django-registration-redux==1.4
 djangorestframework==3.4.7
-django=1.10.5
+django==1.10.5
