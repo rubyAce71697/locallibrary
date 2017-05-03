@@ -4,5 +4,5 @@ django-filter==1.0.1
 django-registration-redux==1.4
 djangorestframework==3.4.7
 django==1.10.5
-gunicorn-19.7.1
+gunicorn==19.7.1
 
