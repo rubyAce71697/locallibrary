@@ -33,14 +33,20 @@ def index(request):
         }
     )
 
+
+
 def get_bookmarks(request):
     """
         returns the bookmarks for the particular user
     """
+    print "fetching bookmarks"
     bookmarks = Bookmarks.objects.filter(user__exact=request.user)
     bookmarks_res = {}
-    print JsonResponse(bookmarks)
-    return JsonResponse(bookmarks)
+    print bookmarks
+    res =  [{"title": bookmark.book.title,"url": bookmark.book.get_absolute_url()} for bookmark in bookmarks]
+    #print JsonResponse(bookmarks,safe=False)
+    print res
+    return JsonResponse(res, safe=False)
 
 class BooksListView(LoginRequiredMixin,generic.ListView):
     login_url = 'user_login'
@@ -171,7 +177,13 @@ def AllLoanedBooksListView(request):
             'instances_onloan': instances_onloan
         }
     )
-
+def ifIssued(request):
+    print "cehcking if the book is issue by user " + request.user .first_name
+    return JsonResponse("success",safe=False)
+def ifbookmarked(reqeust):
+    print "checking if the book is bbookarked bu iser" + reqeust.user.first_name
+    return JsonResponse("success",safe=False)
+    
 class AuthorCreate(CreateView):
     model = Author
     fields = "__all__"

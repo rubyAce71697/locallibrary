@@ -38,5 +38,12 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(r'^ajax/bookmarks/$', views.get_bookmarks, name='get_bookmarks')
+    url(r'^ajax/bookmarks/$', views.get_bookmarks, name='fetch_bookmarks')
+]
+
+urlpatterns += [
+    url(r'^ajax/bookmarked/$', views.ifbookmarked, name='check_bookmarks')
+]
+urlpatterns += [
+    url(r'^ajax/issued/$', views.ifIssued, name='check_issue')
 ]

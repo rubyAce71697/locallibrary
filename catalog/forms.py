@@ -5,7 +5,7 @@ import datetime
 from django.utils.translation import ugettext_lazy as _
 
 class UserLoginForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput, help_text="Password")
     class Meta:
         model = User
         fields = ('username','password')
