@@ -166,3 +166,7 @@ div.tab button.active {
     border-top: none;
 }
 
+.glyphicon {
+    font-size: 15px;
+}
+    

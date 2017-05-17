@@ -178,11 +178,20 @@ def AllLoanedBooksListView(request):
         }
     )
 def ifIssued(request):
-    print "cehcking if the book is issue by user " + request.user .first_name
-    return JsonResponse("success",safe=False)
-def ifbookmarked(reqeust):
-    print "checking if the book is bbookarked bu iser" + reqeust.user.first_name
-    return JsonResponse("success",safe=False)
+    print "cehcking if the book is issue by user " + request.user.first_name, request.POST['book']
+    book_issued = BookInstance.objects.all().filter(borrower__exact=request.user).filter(status__exact='o').filter(book__title__exact=request.POST['book'])
+    res = {}
+    res['status'] =  bool(book_issued.count())
+    res['due_back'] = book_issued.values('due_back')[0]['due_back'] if bool(book_issued.count()) else None
+    return JsonResponse(res)
+
+def ifbookmarked(request):
+    print "checking if the book is bbookarked bu iser" + request.user.first_name , request.POST['book']
+    bookmark_count = Bookmarks.objects.all().filter(user__exact=request.user).filter(act_ind__exact='Y')
+    print  request.POST['book'] in [book_inst.book.title for book_inst in bookmark_count]
+
+    
+    return JsonResponse(request.POST['book'] in [book_inst.book.title for book_inst in bookmark_count],safe=False)
     
 class AuthorCreate(CreateView):
     model = Author
