@@ -11,7 +11,7 @@
     </td>
     <td align='right'>
       {% if user.is_authenticated %}
-        <a id="bookmarkme" href="javascript:void(0)" title="bookmark"><span class="glyphicon glyphicon-bookmark" style="font-size: 25px;"></span></a>
+        <a id="bookmarkme" href="javascript:void(0)" onclick="bookmarkme( '{{ book }}' )"" title="bookmark"><span id="bookmarkicon" class="glyphicon glyphicon-bookmark" style="font-size: 25px;color:white;text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;"></span></a>
         
         Due on : <span id="dueback"></span>
       {% endif %}
@@ -46,8 +46,9 @@
   
   $("document").ready(function(){
     console.log("window loaded, calling the functions")
-    //checkIfBookmarked( '{{ book}}');
+    checkIfBookmarked( '{{ book}}');
     checkIfIssued( '{{ book}}');
+    
 
   });
 </script>
