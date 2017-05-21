@@ -7,7 +7,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixi
 from django.contrib.auth import login,logout,authenticate
 from django.http import HttpResponseRedirect,JsonResponse
 from django.urls import reverse_lazy
-from .forms import UserLoginForm,RenewBookForm                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+from .forms import UserLoginForm,RenewBookForm        
+from django.db.transaction import commit        
+from django.db.models import Q                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 import datetime
 
 # Create your views here.
@@ -39,8 +41,8 @@ def get_bookmarks(request):
     """
         returns the bookmarks for the particular user
     """
-    print "fetching bookmarks"
-    bookmarks = Bookmarks.objects.filter(user__exact=request.user)
+    print "fetching bookmarks for user ----------------", request.user
+    bookmarks = Bookmarks.objects.filter(user__exact=request.user).filter(act_ind__exact='Y')
     bookmarks_res = {}
     print bookmarks
     res =  [{"title": bookmark.book.title,"url": bookmark.book.get_absolute_url()} for bookmark in bookmarks]
@@ -187,12 +189,47 @@ def ifIssued(request):
 
 def ifbookmarked(request):
     print "checking if the book is bbookarked bu iser" + request.user.first_name , request.POST['book']
-    bookmark_count = Bookmarks.objects.all().filter(user__exact=request.user).filter(act_ind__exact='Y')
-    print  request.POST['book'] in [book_inst.book.title for book_inst in bookmark_count]
+    bookmark = Bookmarks.objects.filter( Q(user__exact=request.user) & Q(book__title__iexact=request.POST['book']) & Q(act_ind__exact='Y'))
+    status = bool(bookmark.count())
+    
+    return JsonResponse({'status':status})
 
-    
-    return JsonResponse(request.POST['book'] in [book_inst.book.title for book_inst in bookmark_count],safe=False)
-    
+
+def bookmarkme(request):
+    print request.POST['book']
+    bookmark = Bookmarks.objects.filter( Q(user__exact=request.user) & Q(book__title__iexact=request.POST['book']))
+    status = ""
+    print bookmark.__dict__,bookmark.count()
+    if bookmark.count():
+        print "----- bookmark already exist for user --------", request.user
+        bookmark = Bookmarks.objects.get( Q(user__exact=request.user) & Q(book__title__iexact=request.POST['book']))
+        print "--- bookmark.user --------", bookmark.user.__dict__
+        print "--- request.user ---------", request.user.__dict__
+        print "updating the bookmark"
+        print bookmark.act_ind
+        if bookmark.act_ind == 'Y':
+            bookmark.act_ind='N'
+            status="removed"
+        else:
+            bookmark.act_ind='Y'
+            status="bookmarked"
+
+        print bookmark.__dict__
+        bookmark.update_dt=datetime.datetime.now()
+        bookmark.save()
+
+    else:
+        print "------------creating the bookmark-------------------"
+        book_obj = Book.objects.get(title__iexact=request.POST['book'])
+        bookmark = Bookmarks.objects.create(user=request.user,book=book_obj,create_dt= datetime.datetime.now(),update_dt=datetime.datetime.now(),act_ind='Y')
+        print bookmark.__dict__
+        bookmark.save()
+
+        status = "bookmarked"
+
+    return JsonResponse({'status':status})
+
+
 class AuthorCreate(CreateView):
     model = Author
     fields = "__all__"

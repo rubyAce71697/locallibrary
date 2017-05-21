@@ -47,3 +47,7 @@ urlpatterns += [
 urlpatterns += [
     url(r'^ajax/issued/$', views.ifIssued, name='check_issue')
 ]
+
+urlpatterns += [
+    url(r'^ajax/bookmarkme/$', views.bookmarkme, name='check_issue')
+]
