@@ -46,7 +46,7 @@ $.ajax({
         if (json.status == true){
             $("#issueme").text("Issued");
             $("#issueme").removeAttr("hidden");
-            $("#dueback").text(json.due_back);
+            $("#dueback").text("Due on: "   + json.due_back);
             console.log(" Changing the issued text");
         }
 
