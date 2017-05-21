@@ -9,10 +9,23 @@ $.ajax({
             "book" : book},
     success :function(json){
         
-        console.log("chcking if bookmarked " + json);
-        if (json == true){
-            $("#bookmarkme").text("Bookmarked");
-            console.log(" Changing the bookmark text");
+        console.log("chcking if bookmarked " + json.status);
+         if (json.status == true){
+            
+            $("#bookmarkicon").css("color", ""); 
+            $("#bookmarkicon").css("text-shadow", ""); 
+
+            
+            console.log(" Changing the bookmark: bookmarked");
+        }
+        else{
+                       
+            $("#bookmarkicon").css("color", "white"); 
+            $("#bookmarkicon").css("text-shadow", " -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"); 
+
+            
+            console.log(" Changing the bookmark: removed");
+
         }
     }
 
@@ -40,6 +53,49 @@ $.ajax({
     }
 
 })
+}
+function bookmarkme(book){
+console.log("bookmark me is clicked", book)
+
+$.ajax({
+    url: "../ajax/bookmarkme/",
+    type: "POST",
+    data: {csrfmiddlewaretoken: $.cookie("csrftoken"),
+            "book": book},
+
+    success :function(json){
+        console.log("printing object in bookmarkme " + json.status );
+        
+       
+        if (json.status == "bookmarked"){
+            
+            $("#bookmarkicon").css("color", ""); 
+            $("#bookmarkicon").css("text-shadow", ""); 
+
+            
+            console.log(" Changing the bookmark: bookmarked");
+        }
+        else{
+                       
+            $("#bookmarkicon").css("color", "white"); 
+            $("#bookmarkicon").css("text-shadow", " -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"); 
+
+            
+            console.log(" Changing the bookmark: removed");
+
+        }
+
+    }
+
+    
+
+})
+$(document).ajaxComplete(
+    fetch_bookmarks())
+
+
+
+
 }
 
 function openCity(cityName) {
