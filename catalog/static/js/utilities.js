@@ -124,7 +124,7 @@ function fetch_bookmarks(){
             $("#bookmarks").empty();
             $.each(json, function(index,data1){
                 console.log(data1);
-                $("#bookmarks").append("<li><a href=" + data1['url'] + ">" + data1['title'] + "</li>");
+                $("#bookmarks").append("<li><a href=" + data1['url'] + ">" + data1['title'] + "</li><hr style='margin:0.05px; border-color:#3d3d29'>");
             });
         }
 

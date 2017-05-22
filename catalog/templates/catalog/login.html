@@ -14,13 +14,13 @@
   
 </head>
 
-<body>
+<body style="bgcolor:#000d33">
     <div class="wrapper">
     <form class="form-signin" method="post" action="{% url 'login' %}"> 
       {% csrf_token %}      
       <h2 class="form-signin-heading">Please login</h2>
-        {{ form.username|addClass:"form-control" }}
-        {{ form.password|addClass:"form-control" }}
+        {{ form.username|addClass:"class,form-control" }}
+        {{ form.password|addClass:"class,form-control" }}
 
  
 

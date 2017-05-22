@@ -230,6 +230,15 @@ def bookmarkme(request):
     return JsonResponse({'status':status})
 
 
+def get_defaulters(request):
+    defaulter_instances = BookInstance.objects.filter(Q(borrower__isnull=False ) & Q( due_back__lt=datetime.datetime.now()))
+    print "--- number of defaulters --- ", defaulter_instances.count()
+
+    return render( request, "catalog/all_defaulters.html",
+    context={
+        "defaulters": defaulter_instances
+    })
+
 class AuthorCreate(CreateView):
     model = Author
     fields = "__all__"

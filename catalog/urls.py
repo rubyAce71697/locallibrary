@@ -51,3 +51,7 @@ urlpatterns += [
 urlpatterns += [
     url(r'^ajax/bookmarkme/$', views.bookmarkme, name='check_issue')
 ]
+
+urlpatterns += [
+    url(r'^defaulters/$', views.get_defaulters, name='all-defaulters')
+]
