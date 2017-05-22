@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+
+{% block content %}
+ <table>
+    <tr><h1>All Defaulters</h1> </tr>
+    <tr>
+        <table>
+            <tr>
+                <th>Borrower</th>
+                <th>Book</th>
+                <th>Book Imprint</th>
+                <th>Due back</th>
+                <th>Fine</th>
+            </tr>
+            {% for defaulter in defaulters %}
+                <tr>
+                    <td> {{ defaulter.borrower.first_name }}  {{ defaulter.borrower.last_name }}</td>
+                    <td> {{ defaulter.book.title }} </td>
+                    <td> {{ defaulter.imprint }} </td>
+                    <td> {{ defaulter.due_back }} </td>
+                    <td>  </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </tr>
+    
+</table>
+
+{% endblock %}
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+  
+  $("document").ready(function(){
+    console.log("window loaded, calling the functions")
+    checkIfBookmarked( '{{ book}}');
+    checkIfIssued( '{{ book}}');
+    
+
+  });
+</script>
+{% endblock %}
