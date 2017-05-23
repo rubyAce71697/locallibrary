@@ -4,15 +4,26 @@
     <h1>Book List</h1>
 
     {% if book_list %}
-    <ul>
+        <table data-toggle="table">
+            <tr>
+                <th>Book</th>
+                <th>ISBN</th>
+                <th>Genre</th>
+                <th>Author</th>
+            </tr>
+            {% for book in book_list %} 
+                <tr>
+                    <td> <a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+                    <td> {{ book.isbn }} </td>
+                    <td> {% if book.genere is None %} {{ book.genere }} {% else %} - {% endif %} </td>
+                    <td> <a href ="{{ book.author.get_absolute_url }}">  {{book.author}} </a> </td>
+                    <td>  </td>
+                </tr>
+            {% endfor %}
+        </table>
+  
 
-      {% for book in book_list %}
-      <li>
-        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{book.author}})
-      </li>
-      {% endfor %}
-
-    </ul>
+    
     {% else %}
       <p>There are no books in the library.</p>
     {% endif %}       

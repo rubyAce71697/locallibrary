@@ -3,10 +3,9 @@
 
 
 {% block content %}
- <table>
-    <tr><h1>All Defaulters</h1> </tr>
-    <tr>
-        <table>
+<h1>All Defaulters</h1>
+
+        <table data-toggle="table">
             <tr>
                 <th>Borrower</th>
                 <th>Book</th>
@@ -24,9 +23,7 @@
                 </tr>
             {% endfor %}
         </table>
-    </tr>
-    
-</table>
+        
 
 {% endblock %}
 
