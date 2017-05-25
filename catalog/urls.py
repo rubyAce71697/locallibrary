@@ -55,3 +55,7 @@ urlpatterns += [
 urlpatterns += [
     url(r'^defaulters/$', views.get_defaulters, name='all-defaulters')
 ]
+
+urlpatterns += [
+    url(r'^profile/(?P<username>\w+)$', views.user_profile, name='user-profile')
+]

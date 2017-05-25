@@ -17,7 +17,7 @@
                     <td> {{ book.isbn }} </td>
                     <td> {% if book.genere is None %} {{ book.genere }} {% else %} - {% endif %} </td>
                     <td> <a href ="{{ book.author.get_absolute_url }}">  {{book.author}} </a> </td>
-                    <td>  </td>
+                    
                 </tr>
             {% endfor %}
         </table>

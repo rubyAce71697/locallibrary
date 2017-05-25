@@ -7,9 +7,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixi
 from django.contrib.auth import login,logout,authenticate
 from django.http import HttpResponseRedirect,JsonResponse
 from django.urls import reverse_lazy
-from .forms import UserLoginForm,RenewBookForm        
+from .forms import UserLoginForm,RenewBookForm,UserForm
 from django.db.transaction import commit        
-from django.db.models import Q                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+from django.db.models import Q    
+from django.forms.models import model_to_dict    
+from django.contrib.auth.models import User
+
 import datetime
 
 # Create your views here.
@@ -34,6 +37,27 @@ def index(request):
             "bookmarks": bookmarks
         }
     )
+
+
+
+@login_required
+def user_profile(request,username):
+    user_obj = User.objects.get(username__iexact=username)
+
+    template_name = "catalog/user_profile.html"
+    if request.method=='POST':
+        user_form = UserForm(data = request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+            user.save()
+            HttpResponseRedirect(reverse('user-profile'))
+
+    else:
+        context = {'form':UserForm(initial={},data=model_to_dict(user_obj))}
+    
+
+        
+    return render(request,template_name,context)
 
 
 
@@ -148,15 +172,18 @@ def register(request):
 
 @permission_required('catalog.can_mark_returned')
 def renew_book_librarian(request,pk):
+    print "in book_inst"
     book_inst = get_object_or_404(BookInstance,pk = pk)
-
+    print book_inst
 
     if request.method == 'POST':
         form = RenewBookForm(request.POST)
 
         if form.is_valid():
             book_inst.due_back = form.cleaned_data['renewal_date']
+            print "saving book_inst after renewing the date"
             book_inst.save()
+            print "book_inst saved "
 
             return HttpResponseRedirect(reverse('all-borrowed'))
 
@@ -251,3 +278,5 @@ class AuthorUpdate(UpdateView):
 class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('author')
+
+

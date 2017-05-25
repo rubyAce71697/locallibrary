@@ -1,6 +1,6 @@
 {% extends "base_generic.html" %}
 {% load static %}
-
+{% load myfilters %}
 
 {% block content %}
 <h1>All Defaulters</h1>
@@ -19,7 +19,7 @@
                     <td> {{ defaulter.book.title }} </td>
                     <td> {{ defaulter.imprint }} </td>
                     <td> {{ defaulter.due_back }} </td>
-                    <td>  </td>
+                    <td> {{ defaulter.due_back|fine }} </td>
                 </tr>
             {% endfor %}
         </table>

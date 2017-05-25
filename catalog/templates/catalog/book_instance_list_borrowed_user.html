@@ -1,5 +1,6 @@
 
 {% extends "base_generic.html" %}
+{% load myfilters %}
 
 {% block content %}
     <h1>Borrowed books</h1>
@@ -17,8 +18,8 @@
                     <td> <a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a> </td>
                     <td> {{ bookinst.imprint }} </td>
                     <td class="{% if bookinst.is_overdue %}text-danger{% endif %}"> {{ bookinst.due_back }} </td>
-                    <td> - </td>
-                    <td>  </td>
+                    <td> {{ bookinst.due_back|fine }} </td>
+                    
                 </tr>
             {% endfor %}
         </table>
