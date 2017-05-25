@@ -13,7 +13,7 @@ class UserLoginForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields  = ('username', 'first_name','last_name', 'email')
+        fields = "__all__"
 
 class RenewBookForm(forms.Form):
     renewal_date = forms.DateField(help_text='Enter a date between now and 4 weeks (default 3).')
