@@ -25,7 +25,7 @@ SECRET_KEY = 'h!erfg9q!+r4wo#tfcyekl=3ozt)w)4(*)fr4o1so!v65gi_!g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['morning-brushlands-15255.herokuapp.com','localhost']
+ALLOWED_HOSTS = ['library-prod.herokuapp.com','localhost']
 
 
 # Application definition
