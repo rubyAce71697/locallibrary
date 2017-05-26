@@ -46,16 +46,22 @@ def user_profile(request,username):
 
     template_name = "catalog/user_profile.html"
     if request.method=='POST':
+        print "request method is port"
         user_form = UserForm(data = request.POST)
-        if user_form.is_valid():
-            user = user_form.save()
-            user.save()
-            HttpResponseRedirect(reverse('user-profile'))
+        print request.POST.__dict__
+        print request.POST['first_name']
+        print request.POST['last_name']
+        print user_form
+        print "user_form.is_valid() : ", user_form.is_valid()
+        user_obj.first_name = request.POST['first_name']
+        user_obj.last_name = request.POST['last_name']
+        user_obj.save()
+        
+            
+    print "print request method is get"
+        
 
-    else:
-        context = {'form':UserForm(initial={},data=model_to_dict(user_obj))}
-    
-
+    context = {'form':UserForm(initial={},data=model_to_dict(user_obj))}
         
     return render(request,template_name,context)
 

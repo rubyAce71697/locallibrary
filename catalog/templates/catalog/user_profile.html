@@ -15,12 +15,12 @@
         </div>
         <div class='row'>
             <div class="col-md-3">
-                <span class="label {% if form.is_active %}label-success{% else %}label-danger{% endif %}">{% if form.is_active %}Active{% else %}InActive{% endif %}</span>
+                <span class="label {% if form.is_active.value %}label-success{% else %}label-danger{% endif %}">{% if form.is_active.value %}Active{% else %}InActive{% endif %}</span>
             </div>
         </div>
         <div class='row'>
             <div class="col-md-3">
-                <span class="label {% if form.is_staff %}label-success{% else %}label-danger{% endif %}">{% if form.is_staff %}Staff{% else %}Non Staff{% endif %}</span>
+                <span class="label {% if form.is_staff.value %}label-success{% else %}label-danger{% endif %}">{% if form.is_staff.value %}Staff{% else %}Non Staff{% endif %}</span>
             </div>
         </div>
         <div class='row'>
@@ -45,22 +45,28 @@
           <i class="fa fa-coffee"></i>
           This is an <strong>.alert</strong>. Use this to show important messages to the user.
         </div>
-                <h3>Personal info </h3>
+                <h3>Personal info 
+                  {% if user.username == form.username.value %} 
+                      <input type='button' onclick="edit()" class="btn btn-primary" value="Edit" />
+                  {% endif %}      
+                </h3>
 
 
       
         
-        <form class="form-horizontal" role="form">
+        <form class="form-horizontal" action="" method="post" role="form">
+          
+            {% csrf_token %}
           <div class="form-group">
             <label class="col-lg-3 control-label">First name:</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" value= "{{ form.first_name.value }}" disabled >
+              <input class="form-control" name="first_name" id="first-name" type="text" value= "{{ form.first_name.value }}" disabled >
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-3 control-label">Last name:</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" value= "{{ form.last_name.value }}" disabled >
+              <input class="form-control" name = "last_name" id="last-name" type="text" value= "{{ form.last_name.value }}" disabled >
             </div>
           </div>
           <div class="form-group">
@@ -72,7 +78,7 @@
           <div class="form-group">
             <label class="col-lg-3 control-label">Email:</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" value= "{{ form.email.value }}" disabled>
+              <input class="form-control" name="email" type="text" value= "{{ form.email.value }}" disabled>
             </div>
           </div>
           <div class="form-group">
@@ -95,18 +101,18 @@
           <div class="form-group">
             <label class="col-md-3 control-label">Username:</label>
             <div class="col-md-8">
-              <input class="form-control" type="text" value="{{ form.username.value }}" disabled>
+              <input class="form-control"  type="text" value="{{ form.username.value }}" disabled>
             </div>
           </div>
 
           
           {% if user.username == form.username.value %}
-            <div class="form-group">
+            <div class="form-group" >
                 <label class="col-md-3 control-label"></label>
                 <div class="col-md-8">
-                <input type="button" class="btn btn-primary" value="Save Changes">
+                <input type="submit" id="user-save" class="btn btn-primary" value="Save" disabled />
                 <span></span>
-                <input type="reset" class="btn btn-default" value="Cancel">
+                <input type="reset"id="user-cancel" class="btn btn-default" value="Cancel" disabled />
                 </div>
             </div>
           {% endif %}
@@ -117,3 +123,15 @@
 <hr>
 
 {% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">
+function edit(){
+  console.log(" The edit is clicked")
+  $("#user-save").removeAttr('disabled');
+  $("#user-cancel").removeAttr('disabled');
+  $("#first-name").removeAttr('disabled');
+  $("#last-name").removeAttr('disabled');
+}
+</script>
+{% endblock %}
