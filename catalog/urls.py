@@ -59,3 +59,7 @@ urlpatterns += [
 urlpatterns += [
     url(r'^profile/(?P<username>\w+)$', views.user_profile, name='user-profile')
 ]
+
+urlpatterns += [
+    url(r'^search$', views.search, name='search')
+]

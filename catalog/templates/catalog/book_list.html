@@ -4,22 +4,39 @@
     <h1>Book List</h1>
 
     {% if book_list %}
-        <table data-toggle="table">
+        <table id="myTable" class="row-border diaplay" cellspacing="0" width="100%">
+            <thead>
             <tr>
                 <th>Book</th>
+                <th>Action</th>
                 <th>ISBN</th>
                 <th>Genre</th>
                 <th>Author</th>
             </tr>
+            </thead>
+            <tbody>
             {% for book in book_list %} 
                 <tr>
                     <td> <a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+                    <td>
+                          {% if user.is_staff %}
+          <div class="dropdown">
+    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Action<span class="caret"></span></button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Issue</a></li>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="">Renew</a></li>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reissue</a></li>
+    </ul>
+  </div>
+      {% endif %}
+                    </td>
                     <td> {{ book.isbn }} </td>
                     <td> {% if book.genere is None %} {{ book.genere }} {% else %} - {% endif %} </td>
                     <td> <a href ="{{ book.author.get_absolute_url }}">  {{book.author}} </a> </td>
                     
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
   
 
@@ -27,4 +44,26 @@
     {% else %}
       <p>There are no books in the library.</p>
     {% endif %}       
+{% endblock %}
+
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+  
+  $("document").ready(function(){
+    console.log("window loaded, calling the functions")
+    checkIfBookmarked( '{{ book}}');
+    checkIfIssued( '{{ book}}');
+    $('#myTable').DataTable({
+        "ordering": true,
+        "searching": true,
+        "paging": false
+
+    });
+    
+
+  });
+</script>
 {% endblock %}

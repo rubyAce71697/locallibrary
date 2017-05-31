@@ -5,8 +5,9 @@
     <h1>All Borrowed books</h1>
 
     {% if num_instances_onloan %}
-      <p> Number of books borrowed  {{ num_instances_onloan }}</p>
-        <table data-toggle="table" data-row-style="rowStyle" data-height="400" class="table" >
+      
+        <table  id="myTable" class="row-border diaplay" cellspacing="0" width="100%" >
+            <thead>
             <tr>
                 <th>Book</th>
                 <th>Borrower</th>
@@ -14,6 +15,8 @@
                 <th>Renew</th>
                 <th>Imprint</th>
             </tr>
+            </thead>
+            <tbody>
             {% for bookinst in instances_onloan %} 
                 <tr>
                     <td> <a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a></td>
@@ -23,10 +26,34 @@
                     <td> {{ bookinst.imprint }} </td>
                 </tr>
             {% endfor %}
+
+            </tbody>
         </table>
   
 
     {% else %}
       <p>There are no books borrowed.</p>
     {% endif %}       
+{% endblock %}
+
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+  
+  $("document").ready(function(){
+    console.log("window loaded, calling the functions")
+    checkIfBookmarked( '{{ book}}');
+    checkIfIssued( '{{ book}}');
+    $('#myTable').DataTable({
+        "ordering": true,
+        "searching": true,
+        "paging": false
+
+    });
+    
+
+  });
+</script>
 {% endblock %}

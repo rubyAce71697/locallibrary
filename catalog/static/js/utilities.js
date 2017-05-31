@@ -138,3 +138,27 @@ function fetch_bookmarks(){
 
     })
 }
+
+function query_text(){
+    var q = $('#query').val();
+
+    $.ajax({
+        url: '../search',
+        method: 'GET',
+        data: {
+            'q': q},
+        success: function(json){
+            console.log(json);
+            var str = "";
+            $.each(json['book'],function(index,data1){
+                str += "<option value=\"" + data1['title'] + "\">" + data1['title'] + "</option>"
+            });
+            console.log(str);
+            $('#search-items').innerHTML = str.toString();
+            $('#search-items').selectedIndex=0;
+            console.log($('#search-items'))
+        }
+
+
+    })
+}

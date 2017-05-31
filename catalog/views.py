@@ -177,7 +177,7 @@ def register(request):
 
 
 @permission_required('catalog.can_mark_returned')
-def renew_book_librarian(request,pk):
+def renew_book_librarian(request,pk, user=None):
     print "in book_inst"
     book_inst = get_object_or_404(BookInstance,pk = pk)
     print book_inst
@@ -286,3 +286,30 @@ class AuthorDelete(DeleteView):
     success_url = reverse_lazy('author')
 
 
+def search(request):
+    context = {}
+    q = request.GET['q']
+    context['sucecss'] = 'success'
+    #search books
+    books = Book.objects.filter(Q( title__istartswith=q))
+    result = {}
+    result['book'] = []
+    result['authors'] = []
+    result['bookmarks'] = []
+    for i in books:
+        item = {}
+        item['title'] = i.title
+        item['url'] = i.get_absolute_url()
+        result['book'].append(item)
+
+    author = Author.objects.filter(Q(first_name__istartswith=q))
+
+    for i in author:
+        item = {}
+        item['title'] = i.first_name + " " + i.last_name
+        item['url'] = i.get_absolute_url()
+        result['authors'].append(item)
+        
+
+        
+    return JsonResponse(result)

@@ -5,14 +5,17 @@
 {% block content %}
 <h1>All Defaulters</h1>
 
-        <table data-toggle="table">
-            <tr>
-                <th>Borrower</th>
-                <th>Book</th>
-                <th>Book Imprint</th>
-                <th>Due back</th>
-                <th>Fine</th>
-            </tr>
+        <table  id="myTable" class="row-border diaplay" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Borrower</th>
+                    <th>Book</th>
+                    <th>Book Imprint</th>
+                    <th>Due back</th>
+                    <th>Fine</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for defaulter in defaulters %}
                 <tr>
                     <td> {{ defaulter.borrower.first_name }}  {{ defaulter.borrower.last_name }}</td>
@@ -22,7 +25,9 @@
                     <td> {{ defaulter.due_back|fine }} </td>
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
+        
         
 
 {% endblock %}
@@ -36,6 +41,12 @@
     console.log("window loaded, calling the functions")
     checkIfBookmarked( '{{ book}}');
     checkIfIssued( '{{ book}}');
+    $('#myTable').DataTable({
+        "ordering": true,
+        "searching": true,
+        "paging": false
+
+    });
     
 
   });
