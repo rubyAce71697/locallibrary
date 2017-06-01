@@ -313,3 +313,16 @@ def search(request):
 
         
     return JsonResponse(result)
+
+def issue(request):
+    print request.GET.__dict__
+    book = request.GET['q']
+    print book
+    template = "catalog/issue.html"
+
+    books = Book.objects.all()
+    users = User.objects.all()
+    context = {}
+    context['books'] = books
+    context['users'] = users
+    return render(request, template, context)

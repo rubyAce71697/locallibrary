@@ -63,3 +63,6 @@ urlpatterns += [
 urlpatterns += [
     url(r'^search$', views.search, name='search')
 ]
+urlpatterns += [
+    url(r'^issue$', views.issue, name='issue')
+]

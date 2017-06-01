@@ -1,0 +1,82 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Issue Book</h1>
+      
+        <table   >
+        
+            <tbody>
+            
+                <tr>
+                    <td> User:
+                         {% if user.is_staff %}
+
+                         <select class="selectpicker  dropdown-toggle btn btn-default btn-sm">
+                                <option selected disabled>Select User</option>
+                                {% for user in users %}
+                                    <option  class="selectpicker dropdown-toggle btn btn-default btn-sm" value="{{ user}}">{{ user }}</option>
+                                {% endfor %}
+
+                        </select>
+                    
+
+                        {% endif %}
+
+
+
+                    </td>
+                    <td> Book: 
+
+                        {% if user.is_staff %}
+                            <select class="selectpicker  dropdown-toggle btn btn-default btn-sm" onchange="getInstances()">
+                                <option selected disabled>Selct Book</option>
+                                {% for book in books %}
+                                        <option class="selectpicker dropdown-toggle btn btn-default btn-sm" value="{{ book.id }}" >{{ book }}</option>
+                                {% endfor %}
+                            </select>
+                            
+                        {% endif %}
+                    </td>
+                    <td id="instances" hidden> Book: 
+
+                        {% if user.is_staff %}
+                            <div>
+                            <select id = "instances-box" class="selectpicker  dropdown-toggle btn btn-default btn-sm">
+                                
+                            </select>
+                            </div>
+                            
+                        {% endif %}
+                    </td>
+                    <td> 
+                        <div class="form-group" >
+                            
+                            <div class="col-md-8">
+                            <input type="button" id="user-save" class="btn btn-primary" value="Issue"  />
+                            </div>
+                        </div>
+                    </td>
+               </tr>
+            
+
+            </tbody>
+        </table>
+  
+
+
+
+{% endblock %}
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+function getInstances(){
+    console.log('fetching bookmarks in fetch_bookmarks function')
+   
+
+   
+}
+</script>
+
+{% endblock %}
