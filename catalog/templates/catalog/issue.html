@@ -28,7 +28,7 @@
                     <td> Book: 
 
                         {% if user.is_staff %}
-                            <select class="selectpicker  dropdown-toggle btn btn-default btn-sm" onchange="getInstances()">
+                            <select class="selectpicker  dropdown-toggle btn btn-default btn-sm" onchange="getInstancs()">
                                 <option selected disabled>Selct Book</option>
                                 {% for book in books %}
                                         <option class="selectpicker dropdown-toggle btn btn-default btn-sm" value="{{ book.id }}" >{{ book }}</option>
