@@ -11,10 +11,10 @@
                     <td> User:
                          {% if user.is_staff %}
 
-                         <select class="selectpicker  dropdown-toggle btn btn-default btn-sm">
+                         <select  id="user-select" class="selectpicker  dropdown-toggle btn btn-default btn-sm" onchange="getInstances()">
                                 <option selected disabled>Select User</option>
                                 {% for user in users %}
-                                    <option  class="selectpicker dropdown-toggle btn btn-default btn-sm" value="{{ user}}">{{ user }}</option>
+                                    <option  class="selectpicker dropdown-toggle btn btn-default btn-sm" value="{{ user }}">{{ user }}</option>
                                 {% endfor %}
 
                         </select>
@@ -28,7 +28,7 @@
                     <td> Book: 
 
                         {% if user.is_staff %}
-                            <select class="selectpicker  dropdown-toggle btn btn-default btn-sm" onchange="getInstancs()">
+                            <select id="books-select" class="selectpicker  dropdown-toggle btn btn-default btn-sm" onchange="getInstances()">
                                 <option selected disabled>Selct Book</option>
                                 {% for book in books %}
                                         <option class="selectpicker dropdown-toggle btn btn-default btn-sm" value="{{ book.id }}" >{{ book }}</option>
@@ -37,11 +37,12 @@
                             
                         {% endif %}
                     </td>
-                    <td id="instances" hidden> Book: 
+                    <td id="instances" hidden> Imprint: 
 
                         {% if user.is_staff %}
                             <div>
-                            <select id = "instances-box" class="selectpicker  dropdown-toggle btn btn-default btn-sm">
+                            <select id = "instances-box" class="selectpicker  dropdown-toggle btn btn-default btn-sm" onchange="enableSubmit()">
+                                
                                 
                             </select>
                             </div>
@@ -52,10 +53,13 @@
                         <div class="form-group" >
                             
                             <div class="col-md-8">
-                            <input type="button" id="user-save" class="btn btn-primary" value="Issue"  />
+                            <input type="button" id="user-save" class="btn btn-primary" value="Issue" disabled onclick="issue()" />
                             </div>
                         </div>
                     </td>
+               </tr>
+               <tr id="issue-msg">
+                   
                </tr>
             
 
@@ -72,10 +76,127 @@
 
 <script type="text/javascript">
 function getInstances(){
-    console.log('fetching bookmarks in fetch_bookmarks function')
-   
+    console.log('fetching bookmarks in fetch_bookmarks function');
+    var selectedBook = $("#books-select").val();
+    console.log(selectedBook);
+    var selectedUser = $("#user-select").val();
+    console.log(selectedUser); 
+    $("#user-save").prop('disabled', true);
+
+    if (selectedBook!= null && selectedUser != null){
+        console.log("do a ajax call")
+         $.ajax({
+        url: 'ajax/verify/',
+        method: 'POST',
+        data: {csrfmiddlewaretoken: $.cookie('csrftoken'),
+            'book': selectedBook,
+            'user': selectedUser},
+
+        success: function(json){
+            console.log(json);
+            if (json['status'] == 'new'){
+                options_str = "<option selected disabled>Selct Imprint</option>";
+                console.log(json['instances']);
+
+                json['instances'].forEach( function(i){
+                    console.log(i.uuid);
+                    options_str += '<option value="' + i['uuid'] + '"';
+                    if (i['available'] == false){
+                        options_str += ' disabled ';
+                    }
+                    options_str +=  ">" +  i['imprint']+ '</option>';
+
+
+                })
+                console.log(options_str + " hi ");
+                document.getElementById('instances-box').innerHTML = options_str;
+                $('#instances').show();
+                $('#issue-msg').hide();
+                
+                
+
+            }
+            else{
+                $('#instances').hide();
+                msg = "The book is currenty issued to selected user and is due on ";
+                msg += json['due_back'];
+                msg += "<br />";
+                msg += "Imprint : " + json['imprint'];
+                document.getElementById('issue-msg').innerHTML = msg;
+                $('#issue-msg').show();
+
+
+            }
+            
+        }
+
+
+    })
+    }
+
 
    
+}
+function enableSubmit(){
+    console.log("enabling submit button");
+    
+    $("#user-save").prop('disabled', false);
+
+}
+
+function issue(){
+    console.log('issuing book instance');
+    var selectedBook = $("#books-select").val();
+    console.log(selectedBook);
+    var selectedUser = $("#user-select").val();
+    console.log(selectedUser); 
+    $("#user-save").prop('disabled', true);
+    var selectedInstance = $("#instances-box").val();
+    console.log(selectedInstance)
+    
+
+    if (selectedBook!= null && selectedUser != null && selectedInstance != null){
+        console.log("do a ajax call")
+         $.ajax({
+        url: 'ajax/issue/',
+        method: 'POST',
+        data: {csrfmiddlewaretoken: $.cookie('csrftoken'),
+            'book': selectedBook,
+            'user': selectedUser,
+            'uuid': selectedInstance},
+
+        success: function(json){
+            console.log(json);
+                $("#user-save").prop('disabled', true);
+                msg = "The book "  + json['book'] + " is issued to username: " + json['borrower'] ;
+                msg += "<br />  Due back on: " + json['due_back'];
+                msg += "<br />";
+                msg += "Imprint : " + json['imprint'];
+                document.getElementById('issue-msg').innerHTML = msg;
+                $('#issue-msg').show();
+                
+
+            }
+            /*
+            else{
+                $('#instances').hide();
+                msg = "The book is currenty issued to selected user and is due on ";
+                msg += json['due_back'];
+                msg += "<br />";
+                msg += "Imprint : " + json['imprint'];
+                document.getElementById('issue-msg').innerHTML = msg;
+                $('#issue-msg').show();
+
+
+            }
+            */
+            
+        
+
+
+    })
+    }
+
 }
 </script>
 

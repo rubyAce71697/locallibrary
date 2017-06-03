@@ -66,3 +66,9 @@ urlpatterns += [
 urlpatterns += [
     url(r'^issue$', views.issue, name='issue')
 ]
+urlpatterns += [
+    url(r'^ajax/verify/$', views.verify_get_instances, name='v_g_instances')
+]
+urlpatterns += [
+    url(r'^ajax/issue/$', views.issue_book, name='issue_instance')
+]

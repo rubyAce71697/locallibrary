@@ -326,3 +326,86 @@ def issue(request):
     context['books'] = books
     context['users'] = users
     return render(request, template, context)
+
+
+@login_required
+@permission_required('catalog.can_mark_returned')
+def verify_get_instances(request):
+    print "verifing and getting the instances"
+    resp = {}
+    resp['success'] = True
+    user = request.POST['user']
+    print user
+    bookId =request.POST['book']
+    print bookId
+
+    #fetch the data from db
+    book = Book.objects.get(id__exact=bookId)
+    print book
+    userInfo = User.objects.get(username__iexact=user)
+    print userInfo
+    issueCount = BookInstance.objects.filter(Q(book__exact=book) & Q(borrower__exact=userInfo))
+    print issueCount.count()
+
+    if issueCount.count() :
+        print "specifid book is already issued to user"
+        resp = {
+            'status': "issued",
+            'book' : issueCount[0].book.title,
+            'imprint' : issueCount[0].imprint,
+            'due_back' : issueCount[0].due_back,
+            'borrower' : issueCount[0].borrower.username
+
+        }
+
+    else:
+        bookinstances = BookInstance.objects.filter(Q(book__exact=book))
+        resp['status'] = 'new'
+        resp['instances'] = []
+        for b_in in bookinstances:
+            temp = {
+                'imprint': b_in.imprint,
+                'available': True if b_in.status == 'a' else False,
+                'uuid': b_in.id
+
+            }
+            
+            resp['instances'].append(temp)
+        print resp
+
+    return JsonResponse(resp)
+    
+@login_required
+@permission_required('catalog.can_mark_returned')
+def issue_book(request):
+    print "Issuing Book"
+    user = request.POST['user']
+    print user
+    bookId =request.POST['uuid']
+    print bookId
+
+    #fetch the data from db
+
+    userInfo = User.objects.get(username__iexact=user)
+    print userInfo
+    issueCount = BookInstance.objects.filter(Q( id__exact=bookId))
+    print issueCount
+    resp = {}
+    if issueCount.count() :
+        #issue the book
+        bookToBeIssued = BookInstance.objects.get(Q( id__exact=bookId))
+        bookToBeIssued.borrower = userInfo
+        bookToBeIssued.due_back = datetime.datetime.now() + datetime.timedelta(days=21)
+        bookToBeIssued.status='o'
+        bookToBeIssued.save()   
+        resp = {
+            "success": True,
+            "due_back": bookToBeIssued.due_back,
+            "borrower": userInfo.username,
+            "book": bookToBeIssued.book.title,
+            "imprint": bookToBeIssued.imprint
+        }
+    else:
+        pass
+    return JsonResponse(resp)
+    
