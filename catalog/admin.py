@@ -105,7 +105,7 @@ class AuthorAdmin(admin.ModelAdmin):
                 for row in data:
                     if len(row) >=4:
                         print row
-                        Author.objects.get_or_create(first_name=row[1],last_name=row[0],date_of_birth=row[2])
+                        Author.objects.get_or_create(first_name=row[1],last_name=row[0])
 
                 #self.add_data_db(data)
                 print "The db object is added"

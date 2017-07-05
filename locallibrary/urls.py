@@ -32,4 +32,9 @@ urlpatterns += [
     url(r'^accounts/',include('django.contrib.auth.urls'))
 ]
 """
+
+urlpatterns += [
+    url(r'^oauth/', include('social_django.urls', namespace='social')),  # <--
+]
+
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

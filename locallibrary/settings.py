@@ -25,7 +25,7 @@ SECRET_KEY = 'h!erfg9q!+r4wo#tfcyekl=3ozt)w)4(*)fr4o1so!v65gi_!g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['library-prod.herokuapp.com','localhost']
+ALLOWED_HOSTS = ['library-prod.herokuapp.com','localhost','192.168.1.4', '192.168.1.10']
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog.apps.CatalogConfig'
+    'catalog.apps.CatalogConfig',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'social_django.middleware.SocialAuthExceptionMiddleware'
 ]
 
 ROOT_URLCONF = 'locallibrary.urls'
@@ -63,11 +66,19 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend'
+)
 WSGI_APPLICATION = 'locallibrary.wsgi.application'
 
 
@@ -124,3 +135,6 @@ STATIC_ROOT = os.path.join(PROJECT_DIR,'static')
 
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_GITHUB_KEY = 'a89881bc063d0a380d98'
+SOCIAL_AUTH_GITHUB_SECRET = '5e6052a2ce663ab94ed7b36e03c717c025bddcd4'
