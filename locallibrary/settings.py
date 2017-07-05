@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,12 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'h!erfg9q!+r4wo#tfcyekl=3ozt)w)4(*)fr4o1so!v65gi_!g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['library-prod.herokuapp.com','localhost','192.168.1.4', '192.168.1.10']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v : [s.strip() for s in v.split(',')])
 
 
 # Application definition
@@ -136,5 +138,5 @@ STATIC_ROOT = os.path.join(PROJECT_DIR,'static')
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 
-SOCIAL_AUTH_GITHUB_KEY = 'a89881bc063d0a380d98'
-SOCIAL_AUTH_GITHUB_SECRET = '5e6052a2ce663ab94ed7b36e03c717c025bddcd4'
+SOCIAL_AUTH_GITHUB_KEY = config('SOCIAL_AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = config('SOCIAL_AUTH_GITHUB_SECRET')
