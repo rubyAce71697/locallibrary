@@ -126,3 +126,13 @@ class Language(models.Model):
         String for representing the Model object (in Admin site etc.)
         """
         return self.name
+
+def user_directory_path(instance,filename):
+        return 'pic/user_{0}/{1}'.format(instance.user.id,filename)
+
+class Profile(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to=user_directory_path,blank=True, null=True)
+
+    def __str__(self):
+        return "{0}/{1}".format(self.user, self.picture)

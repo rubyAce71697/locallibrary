@@ -36,5 +36,19 @@ urlpatterns += [
 urlpatterns += [
     url(r'^oauth/', include('social_django.urls', namespace='social')),  # <--
 ]
+print "URL.py MEDIA_URL", settings.MEDIA_URL
+print "URL.py MEDIA_ROOT", settings.MEDIA_ROOT
 
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)
+
+
+print urlpatterns[-2:]
+
+
+"""
+urlpatterns = patterns('',
+               (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+                 {'document_root': settings.MEDIA_ROOT}),
+              )
+"""

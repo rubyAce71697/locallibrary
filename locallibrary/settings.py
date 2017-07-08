@@ -69,6 +69,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                
+
+
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
@@ -134,9 +139,14 @@ USE_TZ = True
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR,'static')
+MEDIA_ROOT = os.path.join(PROJECT_DIR,'media')
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = '/'
 
 SOCIAL_AUTH_GITHUB_KEY = config('SOCIAL_AUTH_GITHUB_KEY')
 SOCIAL_AUTH_GITHUB_SECRET = config('SOCIAL_AUTH_GITHUB_SECRET')
+
+print "settings.py MEDIA_URL", MEDIA_URL
+print "settings.py MEDIA_ROOT", MEDIA_ROOT

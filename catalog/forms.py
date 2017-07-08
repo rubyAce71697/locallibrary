@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 import datetime
 from django.utils.translation import ugettext_lazy as _
 
+from .models import Profile
+
 class UserLoginForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, help_text="Password")
     class Meta:
@@ -14,6 +16,13 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = "__all__"
+
+
+class ProfileForm(forms.ModelForm):
+    
+    class Meta:
+        model = Profile
+        fields = '__all__'
 
 class RenewBookForm(forms.Form):
     renewal_date = forms.DateField(help_text='Enter a date between now and 4 weeks (default 3).')

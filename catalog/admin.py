@@ -7,13 +7,13 @@ from .forms import AuthorUpLoadForm,LanguageUpLoadForm,GenereUpLoadForm
 import csv
 
 # Register your models here.
-from .models import Author,Book,BookInstance,Language,Genere,Bookmarks
+from .models import Author,Book,BookInstance,Language,Genere,Bookmarks,Profile
 
 #admin.site.register(Author)
 #admin.site.register(Genere)
 #admin.site.register(BookInstance)
 #admin.site.register(Book)
-
+admin.site.register(Profile)
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
     def get_urls(self):

@@ -72,3 +72,8 @@ urlpatterns += [
 urlpatterns += [
     url(r'^ajax/issue/$', views.issue_book, name='issue_instance')
 ]
+
+
+urlpatterns += [
+    url(r'^uploads$', views.upload_pic, name='upload_pic')
+]

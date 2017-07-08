@@ -1,5 +1,5 @@
 from django.shortcuts import render,reverse,get_object_or_404,get_list_or_404
-from .models import Book,Author,BookInstance,Genere,Bookmarks
+from .models import Book,Author,BookInstance,Genere,Bookmarks,Profile   
 from django.views import generic
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.contrib.auth.decorators import login_required,permission_required
@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixi
 from django.contrib.auth import login,logout,authenticate
 from django.http import HttpResponseRedirect,JsonResponse
 from django.urls import reverse_lazy
-from .forms import UserLoginForm,RenewBookForm,UserForm
+from .forms import UserLoginForm,RenewBookForm,UserForm, ProfileForm
 from django.db.transaction import commit        
 from django.db.models import Q    
 from django.forms.models import model_to_dict    
@@ -59,9 +59,23 @@ def user_profile(request,username):
         
             
     print "print request method is get"
-        
+    profileform = Profile.objects.filter(user=request.user).count()
+    print profileform
+    if profileform:
+        profile = Profile.objects.get(user=request.user)
+        print profile
+        profileform = ProfileForm(initial={},data=model_to_dict(profile))
 
-    context = {'form':UserForm(initial={},data=model_to_dict(user_obj))}
+    else:
+        profileform = ProfileForm(initial={},data=model_to_dict(user_obj))
+        profile=None
+        
+    print profileform
+
+    context = {'form':UserForm(initial={},data=model_to_dict(user_obj)), 
+                'profileform': profileform,
+                'profile':profile
+                }
         
     return render(request,template_name,context)
 
@@ -409,3 +423,27 @@ def issue_book(request):
         pass
     return JsonResponse(resp)
     
+
+@login_required
+def upload_pic(request):
+    print "in upload_pic view"
+    print request.method
+    print request.FILES
+    if request.method == 'POST' and request.FILES:
+        print request.FILES['picture']
+        form  = ProfileForm()
+        print "here"
+        form.user = User.objects.get(username__iexact=request.user.username)
+        form.picture = request.FILES['picture']
+        
+        profile = Profile()
+        profile.user = request.user
+        profile.picture = request.FILES['picture']
+        profile.save()
+        #form.save()
+        if form.is_valid():
+            
+            print "form is valid"
+            pass
+    return HttpResponseRedirect(reverse('user-profile' ,args=[ request.user.username]))
+            

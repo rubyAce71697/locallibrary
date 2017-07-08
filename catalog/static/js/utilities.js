@@ -162,3 +162,4 @@ function query_text(){
 
     })
 }
+
