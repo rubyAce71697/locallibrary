@@ -5,4 +5,6 @@ django-registration-redux==1.4
 djangorestframework==3.4.7
 django==1.10.5
 gunicorn==19.7.1
+python-decouple==3.0
+
 
